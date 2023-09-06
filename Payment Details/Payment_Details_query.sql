@@ -27,9 +27,10 @@ SELECT
                                           FROM   AP_INVOICE_DISTRIBUTIONS_ALL ida2
                                           WHERE  ida2.INVOICE_ID = ai.INVOICE_ID)  
        AND ROWNUM = 1                                          
-      ) Location
+      ) Location,
+      si.OK_TO_PAY_FLAG ok_to_pay
 FROM AP_INV_SELECTION_CRITERIA_ALL isc
-  JOIN AP_SELECTED_INVOICES_ALL    si ON si.CHECKRUN_ID = isc.CHECKRUN_ID
+  JOIN AP_SELECTED_INVOICES_ALL    si ON si.CHECKRUN_ID = isc.CHECKRUN_ID AND si.OK_TO_PAY_FLAG = 'Y'
   JOIN AP_INVOICES_ALL             ai ON ai.INVOICE_ID = si.INVOICE_ID
   LEFT JOIN FND_LOOKUP_VALUES_VL        flv ON flv.LOOKUP_TYPE = 'PAY GROUP' AND flv.LOOKUP_CODE = ai.PAY_GROUP_LOOKUP_CODE
   LEFT JOIN AP_TERMS_VL                 at ON at.TERM_ID = ai.TERMS_ID
